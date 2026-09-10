@@ -1,0 +1,23 @@
+From: Contato C <contato@clientec.com>
+To: atendimento@suaempresa.com.br
+Subject: Duis aute irure dolor
+Date: Tue, 01 Sep 2026 16:40:00 -0300
+Message-ID: <multipart-0004@clientec.com>
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="fronteira-alternativa"
+
+--fronteira-alternativa
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+Esta e a versao em texto puro, e e ela que deve ser preferida.
+
+Excepteur sint occaecat cupidatat non proident.
+
+--fronteira-alternativa
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+<html><body><p>Esta e a versao em HTML, que deve ser ignorada.</p></body></html>
+
+--fronteira-alternativa--

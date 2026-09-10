@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16
+    container_name: fio-postgres
+    environment:
+      POSTGRES_DB: fio
+      POSTGRES_USER: fio
+      POSTGRES_PASSWORD: fio
+    ports:
+      # 5432 costuma estar ocupado por um Postgres nativo; publique em 5433.
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - fio-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fio -d fio"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  fio-pgdata:

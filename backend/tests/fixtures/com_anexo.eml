@@ -1,0 +1,24 @@
+From: Contato A <contato@clientea.com>
+To: atendimento@suaempresa.com.br
+Subject: Excepteur sint occaecat
+Date: Tue, 08 Sep 2026 15:10:00 -0300
+Message-ID: <com-anexo-0008@clientea.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="fronteira-anexo"
+
+--fronteira-anexo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+Cupidatat non proident, sunt in culpa qui officia deserunt mollit anim.
+
+Segue a planilha em anexo.
+
+--fronteira-anexo
+Content-Type: application/vnd.ms-excel; name="lorem-ipsum.xlsx"
+Content-Disposition: attachment; filename="lorem-ipsum.xlsx"
+Content-Transfer-Encoding: base64
+
+Y29udGV1ZG8tZmFsc28tZGUtcGxhbmlsaGEtcGFyYS10ZXN0ZQ==
+
+--fronteira-anexo--

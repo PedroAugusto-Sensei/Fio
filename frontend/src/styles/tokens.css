@@ -1,0 +1,35 @@
+/* Tokens do Fio (seção 10 da especificação).
+
+   A superfície verde-clara que separa as palavras do cliente do resto da página
+   (--bg-cliente / --borda-cliente) não é decoração: é o produto. */
+:root {
+  --bg-app: #f6f8f4;
+  --bg-panel: #eaefe6;
+  --bg-surface: #ffffff;
+  --bg-header: #f0f4ec;
+  --bg-cliente: #edf3e9;
+  --borda-cliente: #d7e3cf;
+  --borda: #dce4d6;
+  --borda-suave: #e7ece2;
+  --borda-campo: #d3ddcc;
+  --texto: #1f241e;
+  --texto-prosa: #39412f;
+  --texto-2: #57604f;
+  --texto-3: #6b7364;
+  --texto-4: #85907f;
+  --texto-5: #949e8e;
+  --acento: #23624b;
+  --acento-hover: #1a4e3b;
+  --acento-bg: #e1ebdf;
+  --ok: #4f8a54;
+  --atencao: #9a6b15;
+  --alerta: #a34434;
+  --cliente-texto: #232a21;
+  --cliente-rotulo: #6e7d66;
+  --cliente-mono: #7c8a74;
+
+  --raio: 6px;
+  --raio-pequeno: 5px;
+  --fonte: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
