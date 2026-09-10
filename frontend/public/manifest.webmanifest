@@ -1,0 +1,16 @@
+{
+  "name": "Fio",
+  "short_name": "Fio",
+  "description": "Os chamados com as palavras do cliente.",
+  "display": "standalone",
+  "start_url": "/chamados",
+  "scope": "/",
+  "theme_color": "#23624B",
+  "background_color": "#F6F8F4",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

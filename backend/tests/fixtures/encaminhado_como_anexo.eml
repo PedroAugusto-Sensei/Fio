@@ -1,0 +1,31 @@
+Return-Path: <atendimento@suaempresa.com.br>
+From: Atendimento <atendimento@suaempresa.com.br>
+To: demandas@suaempresa.com.br
+Subject: Enc: At vero eos et accusamus
+Date: Mon, 07 Sep 2026 09:45:00 -0300
+Message-ID: <encaminhado-anexo-0007@suaempresa.com.br>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="fronteira-encaminho"
+
+--fronteira-encaminho
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+Segue abaixo a mensagem do cliente.
+
+--fronteira-encaminho
+Content-Type: message/rfc822
+Content-Disposition: inline
+
+From: Contato D <contato@cliented.com>
+To: atendimento@suaempresa.com.br
+Subject: At vero eos et accusamus
+Date: Mon, 07 Sep 2026 09:40:00 -0300
+Message-ID: <original-do-cliente-0007@cliented.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+Et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum.
+
+--fronteira-encaminho--

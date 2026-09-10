@@ -1,0 +1,19 @@
+From: Contato B <contato@clienteb.com>
+To: atendimento@suaempresa.com.br
+Subject: Ut enim ad minim veniam
+Date: Mon, 24 Aug 2026 10:05:00 -0300
+Message-ID: <somente-html-0003@clienteb.com>
+MIME-Version: 1.0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+<html>
+  <head>
+    <style>p { color: #ff0000; font-family: Arial; }</style>
+  </head>
+  <body>
+    <p>Quis nostrud exercitation ullamco laboris.</p>
+    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse.</p>
+    <script>window.rastreador("abertura");</script>
+  </body>
+</html>
