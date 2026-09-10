@@ -85,7 +85,14 @@ function query(params: Record<string, string | number | boolean | undefined>): s
   return texto ? `?${texto}` : "";
 }
 
+export interface ConfigImap {
+  host: string; usuario: string; caixa_email: string; pasta: string; senha_configurada: boolean;
+}
+
 export const api = {
+  imap: () => pedir<ConfigImap>("/empresa/imap"),
+  salvarImap: (dados: Omit<ConfigImap, "senha_configurada"> & { senha: string }) =>
+    pedir<ConfigImap>("/empresa/imap", { method: "PUT", body: JSON.stringify(dados) }),
   entrar: (usuario: string, senha: string) =>
     pedir<Eu>("/auth/login", { method: "POST", body: JSON.stringify({ usuario, senha }) }),
 

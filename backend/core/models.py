@@ -44,6 +44,11 @@ DIAS_DE_CONVITE = 7
 
 
 class Empresa(models.Model):
+    criador = models.ForeignKey("auth.User", null=True, blank=True, on_delete=models.SET_NULL, related_name="empresas_criadas")
+    imap_host = models.CharField(max_length=253, blank=True, default="")
+    imap_usuario = models.CharField(max_length=254, blank=True, default="")
+    imap_senha = models.TextField(blank=True, default="", editable=False)
+    imap_pasta = models.CharField(max_length=255, default="INBOX")
     nome = models.CharField(max_length=200)
     # A caixa de e-mail da empresa que o ingest lê. Não é endereço de encaminhamento:
     # ninguém encaminha nada para o Fio, o Fio é que lê a caixa.

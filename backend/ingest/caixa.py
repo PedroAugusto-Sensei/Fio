@@ -135,3 +135,9 @@ def leitor_do_ambiente(pasta: str | None = None) -> LeitorIMAP:
         porta=int(getattr(settings, "IMAP_PORT", PORTA_TLS) or PORTA_TLS),
         timeout=float(getattr(settings, "IMAP_TIMEOUT", 30) or 30),
     )
+
+
+def leitor_da_empresa(empresa):
+    from .credenciais import decifrar
+    return LeitorIMAP(host=empresa.imap_host, usuario=empresa.imap_usuario,
+                      senha=decifrar(empresa.imap_senha), pasta=empresa.imap_pasta)

@@ -51,6 +51,7 @@ from core.models import (
     chamados_com_situacao,
     situacao_de,
 )
+from ingest.credenciais import cifrar
 from ingest.entrada import CorrupcaoDetectada, JaDecidido, descartar, promover
 from .schemas import (
     AceitarConviteIn,
@@ -66,6 +67,8 @@ from .schemas import (
     EmpresaIn,
     EmpresaOut,
     Erro,
+    ImapIn,
+    ImapOut,
     LoginIn,
     MeOut,
     MembrosOut,
@@ -190,8 +193,9 @@ def _me(pessoa: Pessoa):
         "empresa": pessoa.empresa.nome,
         "empresa_id": pessoa.empresa_id,
         "papel": pessoa.papel,
+        "pode_configurar_imap": pessoa.empresa.criador_id == pessoa.user_id,
         "caixa_email": pessoa.empresa.caixa_email,
-        "pasta_email": pasta_lida(),
+        "pasta_email": pessoa.empresa.imap_pasta if pessoa.empresa.imap_host else pasta_lida(),
         "caixa_configurada": bool(pessoa.empresa.caixa_email),
         "iniciais": pessoa.iniciais,
     }
@@ -304,7 +308,7 @@ def listar_chamados(
         "por_pagina": POR_PAGINA,
         "abertos": abertos,
         "caixa_email": pessoa.empresa.caixa_email,
-        "pasta_email": pasta_lida(),
+        "pasta_email": pessoa.empresa.imap_pasta if pessoa.empresa.imap_host else pasta_lida(),
     }
 
 
@@ -523,7 +527,7 @@ def listar_emails(request, situacao: str = Query("pendente"), page: int = Query(
         "por_pagina": POR_PAGINA,
         "pendentes": pendentes_de(pessoa),
         "caixa_email": pessoa.empresa.caixa_email,
-        "pasta_email": pasta_lida(),
+        "pasta_email": pessoa.empresa.imap_pasta if pessoa.empresa.imap_host else pasta_lida(),
     }
 
 
@@ -694,6 +698,8 @@ def registrar_empresa(request, dados: RegistrarEmpresaIn):
                 setor=setores[0],
                 papel="admin",
             )
+            empresa.criador = pessoa.user
+            empresa.save(update_fields=["criador"])
     except IntegrityError:  # dois cadastros com o mesmo e-mail no mesmo instante
         raise HttpError(400, "Já existe uma conta com este e-mail. Entre com ela.") from None
 
@@ -923,6 +929,47 @@ def editar_empresa(request, dados: EmpresaIn):
             "nome": empresa.nome,
             "setores": list(empresa.setores),
             "caixa_email": empresa.caixa_email,
-            "pasta_email": pasta_lida(),
+            "pasta_email": pessoa.empresa.imap_pasta if pessoa.empresa.imap_host else pasta_lida(),
         },
     )
+
+
+def _empresa_imap(request):
+    pessoa = pessoa_de(request)
+    if pessoa.empresa.criador_id != pessoa.user_id:
+        raise HttpError(403, "Só quem criou a conta da empresa pode configurar o IMAP.")
+    return pessoa.empresa
+
+
+def _imap_out(empresa):
+    return dict(host=empresa.imap_host, usuario=empresa.imap_usuario,
+                caixa_email=empresa.caixa_email, pasta=empresa.imap_pasta,
+                senha_configurada=bool(empresa.imap_senha))
+
+
+@api.get("/empresa/imap", response=ImapOut)
+def obter_imap(request):
+    return _imap_out(_empresa_imap(request))
+
+
+@api.put("/empresa/imap", response=ImapOut)
+def salvar_imap(request, dados: ImapIn):
+    empresa = _empresa_imap(request)
+    host, usuario, pasta = dados.host.strip(), dados.usuario.strip(), dados.pasta.strip()
+    if (not host or len(host) > 253 or any(c in host for c in "/:@ \r\n")
+            or not usuario or len(usuario) > 254 or not pasta or len(pasta) > 255
+            or any(c in usuario + pasta for c in "\r\n")):
+        raise HttpError(400, "Informe servidor, usuário e pasta válidos.")
+    email = _email_valido(dados.caixa_email)
+    if not dados.senha and (not empresa.imap_senha or host != empresa.imap_host or usuario != empresa.imap_usuario):
+        raise HttpError(400, "Informe a senha para esta conexão IMAP.")
+    empresa.imap_host, empresa.imap_usuario, empresa.imap_pasta = host, usuario, pasta
+    empresa.caixa_email = email
+    if dados.senha:
+        empresa.imap_senha = cifrar(dados.senha)
+    try:
+        with transaction.atomic():
+            empresa.save(update_fields=["imap_host", "imap_usuario", "imap_pasta", "imap_senha", "caixa_email"])
+    except IntegrityError:
+        raise HttpError(400, "Esta caixa já está configurada em outra empresa.") from None
+    return _imap_out(empresa)

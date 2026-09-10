@@ -139,13 +139,17 @@ textarea.campo {
 
 .app {
   display: grid;
-  grid-template-columns: 240px 1fr;
-  min-height: 100%;
+  grid-template-columns: 240px minmax(0, 1fr);
+  height: 100vh;
+  height: 100dvh;
+  overflow: clip;
 }
 
 .lateral {
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow: clip;
   gap: 6px;
   padding: 22px 18px;
   background: var(--bg-panel);
@@ -217,6 +221,9 @@ textarea.campo {
 }
 
 .conteudo {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
   padding: 30px 34px 60px;
   max-width: 1500px;
 }
@@ -1204,31 +1211,6 @@ textarea.campo {
 }
 
 @media (max-width: 980px) {
-  .app {
-    grid-template-columns: 1fr;
-  }
-  .lateral {
-    flex-direction: row;
-    align-items: center;
-    gap: 14px;
-    padding: 12px 16px;
-    border-right: none;
-    border-bottom: 1px solid var(--borda);
-    overflow-x: auto;
-  }
-  .marca {
-    padding: 0 8px 0 0;
-    font-size: 17px;
-  }
-  .cartao-acesso {
-    display: none;
-  }
-  .lateral-rodape {
-    margin-top: 0;
-    margin-left: auto;
-    flex-direction: row;
-    align-items: center;
-  }
   .conteudo {
     padding: 20px 18px 50px;
   }
@@ -1423,3 +1405,7 @@ textarea.campo {
     justify-content: flex-end;
   }
 }
+
+.imap-form { max-width: 620px; }
+.imap-form fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 16px; }
+.imap-form label { display: grid; gap: 6px; }

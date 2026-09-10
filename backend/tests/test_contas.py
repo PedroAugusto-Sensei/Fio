@@ -71,6 +71,7 @@ def test_registrar_empresa_cria_empresa_admin_e_ja_entra(client):
     corpo = resposta.json()
     assert corpo["empresa"] == "Padaria do Bairro"
     assert corpo["papel"] == "admin"
+    assert corpo["pode_configurar_imap"] is True
     assert corpo["nome"] == "Joana Ribeiro"
 
     empresa = Empresa.objects.get(nome="Padaria do Bairro")
@@ -80,6 +81,7 @@ def test_registrar_empresa_cria_empresa_admin_e_ja_entra(client):
 
     pessoa = Pessoa.objects.get(empresa=empresa)
     assert pessoa.papel == "admin"
+    assert empresa.criador_id == pessoa.user_id
     assert pessoa.setor == "Atendimento"
     # O e-mail é o nome de usuário: quem se cadastra entra com o próprio e-mail.
     assert pessoa.user.username == "joana@padaria.com.br"

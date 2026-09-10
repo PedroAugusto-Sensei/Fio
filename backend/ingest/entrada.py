@@ -83,7 +83,7 @@ def enderecos_da_empresa(empresa: Empresa) -> set[str]:
 
     return {
         e.strip().lower()
-        for e in (empresa.caixa_email, getattr(settings, "IMAP_USER", ""))
+        for e in (empresa.caixa_email, (empresa.imap_usuario if empresa.imap_host else getattr(settings, "IMAP_USER", "")))
         if e and e.strip()
     }
 

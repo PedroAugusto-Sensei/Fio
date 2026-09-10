@@ -9,6 +9,7 @@ import { Chamados } from "./pages/Chamados";
 import { Convite } from "./pages/Convite";
 import { CriarConta } from "./pages/CriarConta";
 import { Login } from "./pages/Login";
+import { ConfigurarImap } from "./pages/ConfigurarImap";
 import { Membros } from "./pages/Membros";
 
 /**
@@ -33,6 +34,7 @@ export function Rotas() {
           </RotaProtegida>
         }
       >
+        <Route path="/configuracoes/imap" element={<ConfigurarImap />} />
         <Route path="/emails" element={<Caixa />} />
         <Route path="/chamados" element={<Chamados />} />
         <Route path="/chamados/:id" element={<Chamado />} />

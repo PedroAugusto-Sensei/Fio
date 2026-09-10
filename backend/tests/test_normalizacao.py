@@ -2,6 +2,11 @@
 
 O trecho citado é MARCADO, nunca apagado.
 """
+import base64
+import quopri
+
+import pytest
+
 from ingest.normalizacao import NORM_V, encontrar_citacao, normalizar, normalizar_texto
 
 from .conftest import eml
@@ -71,4 +76,40 @@ def test_marcador_em_ingles_tambem_conta():
 def test_normalizacao_e_deterministica():
     bruto = eml("com_citacao.eml")
     assert normalizar(bruto) == normalizar(bruto)
-    assert NORM_V == 1
+    assert NORM_V == 2
+
+
+@pytest.mark.parametrize("tipo", ["text/plain", "text/html"])
+@pytest.mark.parametrize("transferencia", ["8bit", "base64", "quoted-printable"])
+@pytest.mark.parametrize(
+    "codificacao,charset",
+    [
+        ("utf-8", "utf-8"),
+        ("utf-8", "inexistente"),
+        ("utf-8", "us-ascii"),
+        ("utf-8", None),
+        ("iso-8859-1", "iso-8859-1"),
+        ("iso-8859-1", "utf-8"),
+        ("iso-8859-1", None),
+        ("windows-1252", "windows-1252"),
+        ("windows-1252", "utf-8"),
+        ("windows-1252", None),
+    ],
+)
+def test_acentos_com_charset_ausente_ou_invalido(tipo, transferencia, codificacao, charset):
+    esperado = "Comunicação, notícias, instituição. Não receber notificações."
+    if codificacao == "windows-1252":
+        esperado += " “Olá” — €"
+    corpo = f"<p>{esperado}</p>" if tipo == "text/html" else esperado
+    carga = corpo.encode(codificacao)
+    if transferencia == "base64":
+        carga = base64.b64encode(carga)
+    elif transferencia == "quoted-printable":
+        carga = quopri.encodestring(carga)
+    content_type = tipo + (f"; charset={charset}" if charset else "")
+    bruto = (
+        f"Content-Type: {content_type}\r\n"
+        f"Content-Transfer-Encoding: {transferencia}\r\n\r\n"
+    ).encode("ascii") + carga
+
+    assert normalizar(bruto) == (esperado, None)

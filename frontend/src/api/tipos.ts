@@ -10,6 +10,7 @@ export interface Eu {
   empresa_id: number;
   /** Decide só convidar, editar setores e mexer na caixa. Ler e registrar é de todos. */
   papel: Papel;
+  pode_configurar_imap: boolean;
   /** A caixa que o Fio lê, e a pasta observada dentro dela. */
   caixa_email: string;
   pasta_email: string;

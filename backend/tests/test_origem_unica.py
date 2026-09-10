@@ -134,10 +134,11 @@ def test_nenhum_schema_da_api_aceita_texto_de_mensagem():
         "ConviteIn",
         "AceitarConviteIn",
         "EmpresaIn",
+        "ImapIn",  # Apenas credenciais e pasta; nenhum texto de mensagem.
     }, entradas
 
     # E nenhum dos schemas de conta tem por onde receber texto de cliente.
-    de_conta = ["RegistrarEmpresaIn", "ConviteIn", "AceitarConviteIn", "EmpresaIn"]
+    de_conta = ["RegistrarEmpresaIn", "ConviteIn", "AceitarConviteIn", "EmpresaIn", "ImapIn"]
     for nome in de_conta:
         campos = set(entradas[nome].model_fields)
         assert not campos & {"texto", "corpo", "bruto", "descricao", "mensagem"}, nome

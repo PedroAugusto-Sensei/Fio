@@ -22,6 +22,7 @@ interface Contexto {
     token: string,
     dados: { nome: string; email: string; senha: string; setor: string },
   ) => Promise<void>;
+  atualizar: () => Promise<void>;
   sair: () => Promise<void>;
 }
 
@@ -61,14 +62,16 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
     setEu(await api.aceitarConvite(token, dados));
   }, []);
 
+  const atualizar = useCallback(async () => { setEu(await api.eu()); }, []);
+
   const sair = useCallback(async () => {
     await api.sair();
     setEu(null);
   }, []);
 
   const valor = useMemo(
-    () => ({ eu, carregando, entrar, registrarEmpresa, aceitarConvite, sair }),
-    [eu, carregando, entrar, registrarEmpresa, aceitarConvite, sair],
+    () => ({ eu, carregando, entrar, registrarEmpresa, aceitarConvite, sair, atualizar }),
+    [eu, carregando, entrar, registrarEmpresa, aceitarConvite, sair, atualizar],
   );
   return <SessaoContexto.Provider value={valor}>{children}</SessaoContexto.Provider>;
 }

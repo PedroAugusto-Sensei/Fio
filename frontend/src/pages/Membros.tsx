@@ -103,10 +103,6 @@ export function Membros() {
 
       {erro && <p className="erro">{erro}</p>}
 
-      {/* Somente leitura, e honesto: a caixa não se configura por aqui. O que falta
-          numa empresa nova não é o campo do endereço — é a credencial, que vive em
-          variável de ambiente, uma por instalação. Dizer "configurada" com nada
-          funcionando por trás seria pior que dizer que falta. */}
       <p className={`linha-caixa${eu?.caixa_configurada ? "" : " linha-caixa-alerta"}`}>
         <Envelope />
         {eu?.caixa_configurada ? (

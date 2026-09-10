@@ -24,6 +24,7 @@ class MeOut(Schema):
     #: Escopo de tudo que esta pessoa vê. Vem de `request.user.pessoa.empresa`.
     empresa_id: int
     #: "admin" ou "membro". Decide só convidar, editar setores e mexer na caixa.
+    pode_configurar_imap: bool = False
     papel: str
     #: A caixa que o Fio lê, e a pasta observada dentro dela.
     caixa_email: str
@@ -297,3 +298,19 @@ class EmpresaOut(Schema):
     setores: list[str]
     caixa_email: str
     pasta_email: str
+
+
+class ImapIn(Schema):
+    host: str
+    usuario: str
+    caixa_email: str
+    pasta: str = "INBOX"
+    senha: str = ""
+
+
+class ImapOut(Schema):
+    host: str
+    usuario: str
+    caixa_email: str
+    pasta: str
+    senha_configurada: bool

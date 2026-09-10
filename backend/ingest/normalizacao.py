@@ -13,7 +13,7 @@ import re
 import unicodedata
 from email.message import Message
 
-NORM_V = 1
+NORM_V = 2
 
 # Primeira linha que denuncia o começo do trecho citado.
 _MARCADORES_CITACAO = (
@@ -26,15 +26,17 @@ _TRES_OU_MAIS_QUEBRAS = re.compile(r"\n{3,}")
 
 
 def _decodificar(parte: Message) -> str:
-    """Bytes da parte -> str, respeitando o charset declarado. Nunca levanta."""
+    """Decodifica sem substituir acentos antes de tentar charsets alternativos."""
     carga = parte.get_payload(decode=True)
     if carga is None:
-        carga = str(parte.get_payload()).encode("utf-8", errors="replace")
+        return str(parte.get_payload())
     charset = parte.get_content_charset() or "utf-8"
-    try:
-        return carga.decode(charset, errors="replace")
-    except (LookupError, UnicodeDecodeError):
-        return carga.decode("utf-8", errors="replace")
+    for candidato in dict.fromkeys((charset, "utf-8", "windows-1252", "iso-8859-1")):
+        try:
+            return carga.decode(candidato, errors="strict")
+        except (LookupError, UnicodeError):
+            continue
+    return carga.decode("utf-8", errors="replace")
 
 
 def _html_para_texto(html: str) -> str:

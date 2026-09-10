@@ -308,6 +308,10 @@ class Command(BaseCommand):
             )
             pessoas[username] = pessoa
 
+        if empresa.criador_id is None:
+            empresa.criador = pessoas["autor.1"].user
+            empresa.save(update_fields=["criador"])
+
         admin, _ = User.objects.get_or_create(
             username="admin", defaults={"is_staff": True, "is_superuser": True}
         )

@@ -52,6 +52,11 @@ export function Layout() {
               Membros
             </NavLink>
           )}
+          {eu?.pode_configurar_imap && (
+            <NavLink to="/configuracoes/imap" className={({ isActive }) => `nav-item${isActive ? " ativo" : ""}`}>
+              Configurar IMAP
+            </NavLink>
+          )}
         </nav>
 
         <div className="lateral-rodape">

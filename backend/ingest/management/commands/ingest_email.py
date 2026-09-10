@@ -31,12 +31,13 @@ processo por causa de uma mensagem ruim nem por causa do servidor fora do ar.
 """
 import logging
 
+from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.utils import timezone
 
 from core.models import EmailRecebido, Empresa
-from ingest.caixa import CaixaIndisponivel, LeitorDeCaixa, leitor_do_ambiente
+from ingest.caixa import CaixaIndisponivel, LeitorDeCaixa, leitor_do_ambiente, leitor_da_empresa
 from ingest.entrada import (
     chamado_da_thread,
     ids_de,
@@ -65,6 +66,21 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **opcoes):
+        configuradas = Empresa.objects.exclude(imap_host="")
+        if opcoes.get("empresa"):
+            configuradas = configuradas.filter(pk=opcoes["empresa"])
+        if configuradas.exists():
+            for empresa in configuradas:
+                try:
+                    with leitor_da_empresa(empresa) as leitor:
+                        resumo = self.rodada(empresa, leitor, opcoes["limite"])
+                    self.stdout.write(f"{empresa.caixa_email}: {resumo}")
+                except Exception:
+                    log.warning("Não foi possível ler a caixa da empresa %s.", empresa.pk)
+            if opcoes.get("empresa") or not settings.IMAP_HOST:
+                return
+            if not Empresa.objects.filter(caixa_email__iexact=settings.IMAP_USER, imap_host="").exists():
+                return
         try:
             leitor = leitor_do_ambiente()
         except CaixaIndisponivel as exc:

@@ -335,3 +335,20 @@ Se algo parecer necessário durante a construção, **pare e pergunte** em vez d
 `display: standalone`, `start_url: /chamados`, ícones 192 e 512. O service worker existe só
 para o navegador oferecer instalar — ele **não** cacheia resposta de API, porque chamado velho
 na tela seria pior que tela vazia.
+
+
+### IMAP pelo aplicativo
+
+Quem cadastrou a empresa pode abrir **Configurar IMAP** no menu e informar servidor,
+usuário, endereço da caixa, senha e pasta. A conexão usa TLS na porta 993.
+Salvar guarda os dados; a conexão será usada pelo próximo `ingest_email`
+(o agendamento do comando continua necessário).
+
+As credenciais são individuais por empresa e a senha é cifrada com chave derivada
+ de `SECRET_KEY`. Mantenha essa chave secreta, estável e incluída no procedimento
+ de backup; trocar a chave exige cadastrar novamente as senhas IMAP.
+Após atualizar, instale as dependências do backend e rode `python manage.py migrate`.
+A migração considera o primeiro administrador das empresas existentes como criador,
+conforme o fluxo de cadastro anterior. Novos cadastros gravam o criador explicitamente.
+O comando sem `--empresa` lê as caixas configuradas no app e preserva a caixa legada
+ do ambiente quando ela pertence a uma empresa ainda sem configuração no app.
